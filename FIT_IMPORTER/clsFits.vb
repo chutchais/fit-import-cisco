@@ -76,8 +76,8 @@ Public Class clsFits
         'To use Datetime_checkout -- Completed process.
         Dim vSql As String = "select event.*,operation_map.description as operation_name " & _
                 "from event INNER JOIN operation_map ON event.operation = operation_map.operation " & _
-                "where event.buildtype in ('RMA','PRODUCTION','QUALIFICATION') and " & _
-                "event.model=operation_map.model_type and event.date_time_checkout between ? and ?  " & _
+                "where event.buildtype in ('RMA','PRODUCTION','QUALIFICATION','NORMAL','SERVICE UPGRADE') and " & _
+                "event.date_time_checkout between ? and ?  " & _
                 "order by event.date_time"
 
         Dim cmd As New ADODB.Command()

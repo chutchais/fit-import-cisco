@@ -7,6 +7,7 @@ Public Class Form1
     Dim cnAutoTest As New ADODB.Connection()
     Dim objInI As clsINI
     Dim vWorkingDir As String
+    Dim vServiceURL As String
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnDatabase.Click
         'Dim objFits As New clsFits
@@ -30,13 +31,13 @@ Public Class Form1
 
                 'Open AutoTest database
                 objAutoTest = New clsAutoTest
-                With objAutoTest
-                    .user = objInI.GetString("test database", "user", "")
-                    .password = objInI.GetString("test database", "password", "")
-                    .server = objInI.GetString("test database", "server", "")
-                    .database = objInI.GetString("test database", "database", "")
-                    cnAutoTest = .connect()
-                End With
+                'With objAutoTest
+                '    .user = objInI.GetString("test database", "user", "")
+                '    .password = objInI.GetString("test database", "password", "")
+                '    .server = objInI.GetString("test database", "server", "")
+                '    .database = objInI.GetString("test database", "database", "")
+                '    cnAutoTest = .connect()
+                'End With
 
                 btnDatabase.Text = "&Disconnect Database."
                 btnImport.Enabled = True
@@ -122,17 +123,18 @@ Public Class Form1
                 End If
 
                 'Get Testing Data
-                '1)get Process from BullsEye -- by Station.
-                Dim vProcess As String = requestData("http://127.0.0.1:8000/production/station/" & .operation & "/" & .model & "/")
+                
                 '2)get Measurement data.
                 Dim vTestDataRst As New ADODB.Recordset
 
-                If vProcess <> "" And vProcess <> "None" Then
-                    vTestDataRst = objAutoTest.getTestData(.serialnumber, vProcess, .tester, .datetimein)
-                Else
-                    vTestDataRst = Nothing
-                End If
-
+                '1)get Process from BullsEye -- by Station.
+                'Dim vProcess As String = requestData(vServiceURL & "production/station/" & .operation & "/" & .model & "/")
+                'If vProcess <> "" And vProcess <> "None" Then
+                '    vTestDataRst = objAutoTest.getTestData(.serialnumber, vProcess, .tester, .datetimein)
+                'Else
+                '    vTestDataRst = Nothing
+                'End If
+                vTestDataRst = Nothing
 
 
 
@@ -141,7 +143,7 @@ Public Class Form1
 
 
 
-                uploadData(.outputfile)
+                'uploadData(.outputfile)
                 lblLastDate.Text = .datetimein : Application.DoEvents()
                 '---save last date to INI file---
                 objInI.WriteString("Last execution", "date", .datetimein)
@@ -222,6 +224,7 @@ Public Class Form1
         lblPeriod.Text = objInI.GetString("import", "range", "")
         lblLoop.Text = objInI.GetString("import", "interval", "")
         lblNextRun.Text = Now
+        vServiceURL = objInI.GetString("service", "url", "")
     End Sub
 
     Function getDateTo(vDateFrom As String) As String
@@ -242,6 +245,7 @@ Public Class Form1
 
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles Me.Load
+
         objInI = New clsINI(Application.StartupPath & "\import.ini")
         Timer1.Interval = (Val(objInI.GetString("import", "interval", "")) - 1) * 1000 * 60
         Timer1.Enabled = False
@@ -251,6 +255,8 @@ Public Class Form1
             vWorkingDir = Application.StartupPath & "\"
         End If
 
+        Me.Text = Me.Text + " -- " + objInI.GetString("database", "database", "") _
+            + "(" + objInI.GetString("database", "server", "") + ")"
 
         initialControl()
     End Sub
