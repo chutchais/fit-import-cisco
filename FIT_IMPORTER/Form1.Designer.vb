@@ -45,7 +45,7 @@ Partial Class Form1
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.Timer2 = New System.Windows.Forms.Timer(Me.components)
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label7 = New System.Windows.Forms.Label()
         Me.StatusStrip1.SuspendLayout()
         Me.gbImport.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -245,21 +245,21 @@ Partial Class Form1
         '
         Me.Timer2.Interval = 1000
         '
-        'Button1
+        'Label7
         '
-        Me.Button1.Location = New System.Drawing.Point(383, 110)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(39, 26)
-        Me.Button1.TabIndex = 6
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(377, 114)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(33, 13)
+        Me.Label7.TabIndex = 6
+        Me.Label7.Text = "Cisco"
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(523, 158)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.btnExit)
         Me.Controls.Add(Me.btnImport)
@@ -301,6 +301,6 @@ Partial Class Form1
     Friend WithEvents lblFrom As System.Windows.Forms.Label
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
     Friend WithEvents Timer2 As System.Windows.Forms.Timer
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Label7 As System.Windows.Forms.Label
 
 End Class

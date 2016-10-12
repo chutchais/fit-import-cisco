@@ -99,7 +99,7 @@ Public Class Form1
                 tssStatus.Text = "Importing......." & rs.AbsolutePosition & "/" & rs.RecordCount : Application.DoEvents()
                 .serialnumber = rs.Fields("serial_no").Value
                 .workorder = rs.Fields("workorder").Value
-                .model = IIf(IsDBNull(rs.Fields("model").Value), "", rs.Fields("model").Value)
+                .model = IIf(IsDBNull(rs.Fields("model").Value), rs.Fields("model2").Value, rs.Fields("model").Value)
 
                 .partnumber = rs.Fields("part_no").Value
                 .operation = rs.Fields("operation").Value
@@ -143,10 +143,10 @@ Public Class Form1
 
 
 
-                'uploadData(.outputfile)
-                lblLastDate.Text = .datetimein : Application.DoEvents()
+                uploadData(.outputfile)
+                lblLastDate.Text = .datetimeout : Application.DoEvents()
                 '---save last date to INI file---
-                objInI.WriteString("Last execution", "date", .datetimein)
+                objInI.WriteString("Last execution", "date", .datetimeout)
                 '--------------------------------
                 rs.MoveNext()
             Loop
@@ -168,7 +168,7 @@ Public Class Form1
         Try
             doc.Load(vFile)
             With myHTTP
-                .open("Post", "http://127.0.0.1:8000/production/fits/upload/", False)
+                .open("Post", vServiceURL & "production/fits/upload/", False)
                 .setRequestHeader("Content-Type", "text/xml")
                 .send(doc.InnerXml) '+64
                 strReturn = .responseText
@@ -255,10 +255,11 @@ Public Class Form1
             vWorkingDir = Application.StartupPath & "\"
         End If
 
-        Me.Text = Me.Text + " -- " + objInI.GetString("database", "database", "") _
-            + "(" + objInI.GetString("database", "server", "") + ")"
+        'Me.Text = Me.Text + " -- " + objInI.GetString("database", "database", "") _
+        '    + "(" + objInI.GetString("database", "server", "") + ")"
 
         initialControl()
+        Me.Text = Me.Text + " (Target : " + vServiceURL + ")"
     End Sub
 
     Private Sub btnImport_Click(sender As Object, e As EventArgs) Handles btnImport.Click
@@ -301,7 +302,7 @@ Public Class Form1
         Return String.Format("{0:00}:{1:00}:{2:00}", CInt(Math.Floor(RemainingTime.TotalHours)) Mod 60, CInt(Math.Floor(RemainingTime.TotalMinutes)) Mod 60, CInt(Math.Floor(RemainingTime.TotalSeconds)) Mod 60).Replace("-", "")
     End Function
 
-    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click_1(sender As Object, e As EventArgs)
         uploadData("C:\Users\chutchais\Documents\Visual Studio 2013\Projects\test.xml")
     End Sub
 End Class

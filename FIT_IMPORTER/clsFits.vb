@@ -74,11 +74,21 @@ Public Class clsFits
         '                "order by event.date_time"
         'Edit by Chutchai S on Sep 28,2016
         'To use Datetime_checkout -- Completed process.
-        Dim vSql As String = "select event.*,operation_map.description as operation_name " & _
-                "from event INNER JOIN operation_map ON event.operation = operation_map.operation " & _
+        'Dim vSql As String = "select event.*,operation_map.description as operation_name " & _
+        '        "from event INNER JOIN operation_map ON event.operation = operation_map.operation " & _
+        '        "where event.buildtype in ('RMA','PRODUCTION','QUALIFICATION','NORMAL','SERVICE UPGRADE') and " & _
+        '        "event.date_time_checkout between ? and ?  " & _
+        '        "order by event.date_time"
+
+        Dim vSql As String = "select event.*,operation_map.description as operation_name,event_master.model as model2 " & _
+                "from event INNER JOIN " & _
+                "operation_map ON event.operation = operation_map.operation INNER JOIN " & _
+                "event_master ON event.serial_no = event_master.serial_no " & _
                 "where event.buildtype in ('RMA','PRODUCTION','QUALIFICATION','NORMAL','SERVICE UPGRADE') and " & _
-                "event.date_time_checkout between ? and ?  " & _
-                "order by event.date_time"
+                "event_master.workorder <> 'N/A'  " & _
+                "and event_master.model_type=operation_map.model_type " & _
+                "and event.date_time_checkout between ? and ? " & _
+                "order by event.date_time_checkout"
 
         Dim cmd As New ADODB.Command()
         Dim sDateFromParam As ADODB.Parameter
